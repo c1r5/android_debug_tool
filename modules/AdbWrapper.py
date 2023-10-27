@@ -18,11 +18,11 @@ class Adb:
     @staticmethod
     def run_command() -> subprocess.CompletedProcess:
         cmd = subprocess.run(
-            AdbShell.get_arguments(),
+            Adb.get_arguments(),
             capture_output=True
         )
 
-        AdbShell._arguments = Adb._arguments[0:2]
+        Adb._arguments = Adb._arguments[0:1]
 
         return cmd
 
@@ -69,19 +69,7 @@ class PackageManager(AdbShell):
             raise Exception("error_at_app_clearing")
 
     @staticmethod
-    def list(feature: str) -> str:
-        AdbShell.add_argument(
-            "pm",
-            "list",
-            feature,
-            "-e",  # filter to only show enabled packages
-            "-3"   # filter to only show third party packages
-        )
-        cmd = AdbShell.run_command()
-        return cmd.stdout.decode()
-
-    @staticmethod
     def pidof(package_name) -> str:
         AdbShell.add_argument("pidof", package_name)
-        result = AdbShell.run_command().stdout.decode()
+        result = AdbShell.run_command().stdout.decode().strip()
         return result

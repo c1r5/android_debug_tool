@@ -1,8 +1,8 @@
 from modules.argument_handler import app_arguments
 from modules.checklist import check_adb
-from modules.AdbWrapper import AdbShell, Adb
 from features.Cstatic_analysis import StaticAnalysis
 from tabulate import tabulate
+from multiprocessing import freeze_support
 import frida
 
 
@@ -31,8 +31,10 @@ def main():
                 print(tabulate(table, headers=["Name", "Package", "PID"]))
                 ...
         case _:
-            raise Exception("anything_here")
+            print("[-] Command not found!")
+            print("Use: adt --help")
 
 
 if __name__ == '__main__':
+    freeze_support()
     main()
