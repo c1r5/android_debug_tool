@@ -8,20 +8,6 @@ def app_arguments():
     )
     # Arguments for package utils feature
     subparsers = parser.add_subparsers(dest="subcommand")
-
-    package_util_parser = subparsers.add_parser("package")
-    
-    package_util_parser.add_argument(
-        "-l",
-        "--list-packages",
-        default="1",
-        nargs="?",
-        type=str,
-        action='store',
-        metavar="",
-        help="list packages and pid of each one"
-    )
-
     # create a static mode call command
     static_mode_subcmd = subparsers.add_parser("static")
 
