@@ -24,7 +24,15 @@ def app_arguments():
 
     # create a static mode call command
     static_mode_subcmd = subparsers.add_parser("static")
-
+    # set to load frida-ssl-pinning script
+    static_mode_subcmd.add_argument(
+        '-s',
+        '--script',
+        nargs="?",
+        action="store",
+        metavar="path/to/script.js",
+        help="Load frida script from disk."
+    )
     # set target package Eg. adt static -t com.example
     static_mode_subcmd.add_argument(
         "-t",

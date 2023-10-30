@@ -54,22 +54,3 @@ class AdbShell (Adb):
         return cmd
 
 
-class PackageManager(AdbShell):
-    def __init__(self, package_name: str):
-        super().__init__()
-        self.packageId = package_name
-
-    def clear(self) -> None:
-        self.add_argument("pm", "clear", self.packageId)
-        cmd = self.run_command()
-
-        if cmd.stdout.decode().strip().lower() == "success":
-            return
-        else:
-            raise Exception("error_at_app_clearing")
-
-    @staticmethod
-    def pidof(package_name) -> str:
-        AdbShell.add_argument("pidof", package_name)
-        result = AdbShell.run_command().stdout.decode().strip()
-        return result

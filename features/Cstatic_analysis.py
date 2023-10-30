@@ -1,12 +1,18 @@
-from modules.AdbWrapper import Adb, PackageManager, AdbShell
-from time import sleep
+from modules.AdbWrapper import Adb, AdbShell
+from modules.Managers import PackageManager, ProcessManager
+from argparse import Namespace
+from modules.FridaLoader import FridaScriptLoader
 
 
 class StaticAnalysis:
-    def __init__(self, target: str, port: int):
-        self.target = target
-        self.port = port
-        self.pm = PackageManager(target)
+    def __init__(self, arguments: Namespace):
+        self.target = arguments.target
+        self.port = arguments.port
+        self.script = arguments.script
+
+        self.pm = PackageManager(arguments.target)
+        self.ps = ProcessManager(arguments.target)
+        self.frida = FridaScriptLoader(arguments.target)
 
     def reset(self) -> None:
         print(f"[+] Clearing all...")
@@ -29,15 +35,13 @@ class StaticAnalysis:
         print("[+] Setting app to debug mode...")
         AdbShell.run_command()
 
-        AdbShell.add_argument("monkey", "-p", self.target)
-        AdbShell.add_argument("-c", "android.intent.category.LAUNCHER 1")
+        if not self.script:
+            self.ps.run()
+        else:
+            self.frida.add_script(self.script)
+            self.frida.run()
 
-        print("[+] Starting app....")
-        AdbShell.run_command()
-
-        sleep(1)
-
-        app_pid = self.pm.pidof(self.target)
+        app_pid = self.ps.pidof(self.target)
 
         Adb.add_argument(
             "forward",

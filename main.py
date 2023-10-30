@@ -16,7 +16,7 @@ def main():
     arguments = app_arguments()
     match arguments.subcommand:
         case "static":
-            static_mode = StaticAnalysis(arguments.target, arguments.port)
+            static_mode = StaticAnalysis(arguments)
             static_mode.run()
         case "package":
             if not arguments.list_packages:
